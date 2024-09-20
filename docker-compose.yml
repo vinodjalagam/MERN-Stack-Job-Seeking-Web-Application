@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      - mern_job
+    depends_on:
+      - mongodb
+    ports:
+      - 4000:4000
+
+  mongodb:
+    image: mongo:latest
+    networks:
+      - mern_job
+    volumes:
+      - mongodb:/data/db
+    ports:
+      - 27017:27017
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    networks:
+      - mern_job
+    ports:
+      - 5173:5173
+
+
+networks:
+  mern_job:
+    driver: bridge
+    name: mern_job
+
+    
+volumes:
+  mongodb:
+    driver: local
+    name: mongodb
